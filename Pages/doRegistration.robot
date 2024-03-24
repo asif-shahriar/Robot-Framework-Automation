@@ -4,9 +4,9 @@ Variables  ../Selectors/Registration.py
 
 *** Keywords ***
 Create New User To Register
-    [Arguments]  ${first}   ${last}
+    [Arguments]  ${first}   ${email}
     input text  ${newFirstName}     ${first}
-    input text  ${newLastName}      ${last}
+    input text  ${newEmail}      ${email}
     wait until element is visible  ${btnSubmit}
     click button  ${btnSubmit}
     sleep  2
@@ -28,8 +28,8 @@ Input Address
     input text  ${enterAddress}     ${address}
 
 Select A Country
-    [Arguments]  ${country}
-    select from list by label  ${selectCountry}    ${country}
+    [Arguments]  ${index}
+    select from list by index    ${selectCountry}    ${index}
 
 Input State
     [Arguments]  ${state}
@@ -48,9 +48,15 @@ Input Mobile Number
     input text  ${enterPhone}   ${mobile}
 
 Click Create Account Button
-    scroll element into view    ${btnCreate}
+#    scroll element into view    ${btnCreate}
+    Scroll To Top Or Bottom    bottom
     wait until element is visible    ${btnCreate}
     click button  ${btnCreate}
 
 Assert Success
     page should contain  Congratulations! Your new account has been successfully created!
+
+Scroll To Top Or Bottom
+    [Arguments]    ${position}
+    Run Keyword If    '${position}' == 'top'    Execute JavaScript    window.scrollTo(0, 0)
+    Run Keyword If    '${position}' == 'bottom'    Execute JavaScript    window.scrollTo(0, document.body.scrollHeight)
